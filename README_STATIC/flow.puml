@@ -1,0 +1,38 @@
+@startuml
+start
+
+:輸入 歌單位置 (music_folder);
+if (music_folder 是否為空?) then (是)
+  :印出 "❌ 請提供有效的歌單位置。";
+  stop
+endif
+
+:呼叫 get_ramdom_playlist(music_folder);
+
+partition get_ramdom_playlist {
+  :掃描 music_folder 中的檔案;
+  :過濾出副檔名為 .mp3 或 .wav 的檔案;
+  :將檔案清單隨機打散 (random.shuffle);
+  :回傳 playlist;
+}
+
+if (playlist 是否為空?) then (是)
+  :印出 "❌ 沒有找到音樂檔案。";
+  stop
+else (否)
+  :初始化 pygame.mixer (pygame.mixer.init());
+endif
+
+repeat
+  :從 playlist 中取出一首 music = playlist.pop(0);
+  :建立完整路徑 full_path = os.path.join(music_folder, music);
+  :print當前播放的音樂;
+  :載入音樂; 
+  :播放音樂; 
+  if (playlist 是否為空?) then (是)
+    :重新呼叫 get_ramdom_playlist(music_folder) 以補滿歌單;
+  endif
+repeat while (永遠循環)
+
+stop
+@enduml
